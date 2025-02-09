@@ -3,7 +3,6 @@ import { sendEmail } from "@/lib/workflows";
 import { db } from "@/db/drizzle";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { auth } from "@/auth";
 
 type InitialData = {
   email: string;
@@ -15,13 +14,13 @@ const THREE_DAYS_IN_MS = 3 * ONE_DAY_IN_MS;
 const ONE_MONTH_IN_MS = 30 * ONE_DAY_IN_MS;
 
 export const { POST } = serve<InitialData>(async (context) => {
-  const { email } = context.requestPayload;
+  const { email, fullName } = context.requestPayload;
 
   await context.run("new-signup", async () => {
     await sendEmail({
-      email,
-      subject: "Hey!, we miss you",
-      message: "Hey!, We miss you.",
+      fullName,
+      message:
+        "Please note that your library acount can take up to 3 days to be activated.",
     });
   });
 
@@ -35,17 +34,16 @@ export const { POST } = serve<InitialData>(async (context) => {
     if (state === "non-active") {
       await context.run("send-email-non-active", async () => {
         await sendEmail({
-          email,
-          subject: "Hey!, we miss you",
-          message: "Hey!, We miss you.",
+          fullName,
+          message:
+            "Hey!, You have not been active for a while. Please sign into your account to activate your account.",
         });
       });
     } else if (state === "active") {
       await context.run("send-email-active", async () => {
         await sendEmail({
-          email,
-          subject: "Hey!, we miss you",
-          message: "Hey!, We miss you.",
+          fullName,
+          message: "Hey!, Your account has been activated.",
         });
       });
     }

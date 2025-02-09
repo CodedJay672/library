@@ -8,25 +8,26 @@ export const workflowClient = new WorkflowClient({
 });
 
 export const sendEmail = async ({
-  email,
-  subject,
   message,
+  fullName,
 }: {
-  email: string;
-  subject: string;
   message: string;
+  fullName: string;
 }) => {
   try {
-    await emailjs.send(
+    const response = await emailjs.send(
       config.env.emailjs.serviceId,
       config.env.emailjs.templateId,
       {
-        to_email: email,
-        subject,
+        to_name: fullName,
         message,
       },
       config.env.emailjs.publicKey
     );
+
+    if (!response.status) {
+      console.log(response.text);
+    }
   } catch (error) {
     console.log(error);
   }
