@@ -8,6 +8,8 @@ import { genSaltSync, hashSync } from "bcryptjs";
 import { headers } from "next/headers";
 import ratelimit from "../ratelimit";
 import { redirect } from "next/navigation";
+import { workflowClient } from "../workflows";
+import config from "../config";
 
 export const signInWithCredentials = async (
   param: Pick<AuthCredentials, "email" | "password">
@@ -71,6 +73,13 @@ export const signUp = async (param: AuthCredentials) => {
       universityCard,
     });
 
+    // commence workflow when user signs up
+    const workflow = await workflowClient.trigger({
+      url: `${config.env.upstash.qstashUrl}/api/auth/workflows/onboarding`,
+      body: { email, fullName },
+    });
+
+    // log user in
     await signInWithCredentials({ email, password });
     return { success: true };
   } catch (error) {

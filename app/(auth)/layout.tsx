@@ -11,6 +11,7 @@ export default async function AuthLayout({
   const session = await auth();
 
   if (session) redirect("/");
+
   return (
     <main className="auth-container">
       <section className="auth-form">
