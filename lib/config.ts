@@ -2,9 +2,9 @@ const config = {
   env: {
     endpoint: process.env.NEXT_PUBLIC_API_ENDPOINT!,
     prodEndpoint: process.env.NEXT_PUBLIC_PROD_API_ENDPOINT!,
+    databaseUrl: process.env.DATABASE_URL!,
+    authSecret: process.env.AUTH_SECRET!,
     imagekit: {
-      databaseUrl: process.env.DATABASE_URL!,
-      authSecret: process.env.AUTH_SECRET!,
       urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_API_ENDPOINT!,
       publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
       privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,

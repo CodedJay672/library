@@ -19,6 +19,14 @@ export default async function HomeLayout({
   after(async () => {
     if (!session?.user?.id) return;
 
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users?.id, session.user.id))
+      .limit(1);
+
+    if (user[0].lastActivityDate === new Date()) return;
+
     await db
       .update(users)
       .set({ lastActivityDate: new Date() })

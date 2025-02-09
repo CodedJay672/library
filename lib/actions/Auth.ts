@@ -75,7 +75,7 @@ export const signUp = async (param: AuthCredentials) => {
 
     // commence workflow when user signs up
     const workflow = await workflowClient.trigger({
-      url: `${config.env.upstash.qstashUrl}/api/auth/workflows/onboarding`,
+      url: `${config.env.prodEndpoint}/api/auth/workflows/onboarding`,
       body: { email, fullName },
     });
 
